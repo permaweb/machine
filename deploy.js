@@ -26,7 +26,8 @@ async function main() {
         filename: f,
         type: collection.type || 'unknown',
         code: collection.code,
-        fileType: 'image/png'
+        fileType: 'image/png',
+        owners: collection.owners
       } 
     
     })
@@ -48,10 +49,10 @@ async function main() {
     items
   })
 
-  console.log(result)
   await new Promise(r => setTimeout(r, 1000))
   await warp.register(result, 'node2')
 
+  console.log('Collection: ', result)
 }
 
 main()
@@ -70,7 +71,8 @@ function publishCollection(bundlr) {
         balances: input.collection.owners,
         name: input.collection.name,
         description: input.collection.description,
-        ticker: 'ATOMIC'
+        ticker: 'ATOMIC',
+        claimable: []
       })},
       { name: 'Title', value: input.collection.name },
       { name: 'Description', value: input.collection.description },
@@ -81,7 +83,7 @@ function publishCollection(bundlr) {
     ]
     
     const result = await bundlr.upload(JSON.stringify({type: 'Collection', items: input.items}), {tags})
-    console.log(result)
+    
     return result.id
   }
 }
@@ -98,7 +100,8 @@ function upload(bundlr) {
         balances: asset.owners,
         name: asset.title,
         description: asset.description,
-        ticker: 'ATOMIC'
+        ticker: 'ATOMIC',
+        claimable: []
       })},
       { name: 'Title', value: asset.title },
       { name: 'Description', value: asset.description },
