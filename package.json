@@ -1,0 +1,12 @@
+{
+  "name": "bazAR-machine",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@bundlr-network/client": "0.10.x",
+    "warp-contracts": "^1.4.14",
+    "warp-contracts-plugin-deploy": "^1.0.9"
+  }
+}
