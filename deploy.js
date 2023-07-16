@@ -39,8 +39,15 @@ async function main() {
     await new Promise(r => setTimeout(r, 1000))
     console.log(`Registering - ${id}`)
   }))
+  
+  // Banner is optional
+  let banner = ""
+  const hasBanner = fs.fstatSync(`./${folder}/banner.png`)
+  if (hasBanner) {
+    banner = (await bundlr.uploadFile(`./${folder}/banner.png`)).id
+  }
   // deploy banner.png
-  const banner = (await bundlr.uploadFile(`./${folder}/banner.png`)).id
+  
 
   // create collection manifest and upload manifest
   const result = await publishCollection(bundlr)({
@@ -116,6 +123,8 @@ function upload(bundlr) {
     
     _tags = _tags.concat(asset.topics.map(t => ({ name: `topic:${t}`, value: t})))
     
+    //console.log(_tags)
+
     const result = await bundlr.uploadFile(`./${asset.folder}/${asset.filename}`, {
       tags: _tags})
     
