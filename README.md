@@ -6,7 +6,18 @@ The Machine is a tool for deploying collections to the permaweb. To deploy a col
 
 ```sh
 npm i @permaweb/machine
-npx machine collection --wallet ./wallet.json
+npx machine <collection> -w <arWalletFile>
+```
+
+## Example
+
+create folder with assets 'mutants'
+add a collection.json in folder along with the assets
+drop you wallet.json file in the project folder
+
+```sh
+npm i @permaweb/machine
+npx machine mutants -w ./wallet.json
 ```
 
 ## Docs
