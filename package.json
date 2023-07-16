@@ -1,12 +1,14 @@
 {
-  "name": "bazAR-machine",
+  "name": "@permamweb/machine",
   "type": "module",
   "version": "1.0.0",
   "main": "index.js",
+  "bin": "./bin/machine.js",
   "license": "MIT",
   "dependencies": {
     "@bundlr-network/client": "0.10.x",
     "warp-contracts": "^1.4.14",
-    "warp-contracts-plugin-deploy": "^1.0.9"
+    "warp-contracts-plugin-deploy": "^1.0.9",
+    "yargs": "^17.7.2"
   }
 }

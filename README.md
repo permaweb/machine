@@ -4,7 +4,10 @@ The Machine is a tool for deploying collections to the permaweb. To deploy a col
 
 ## Usage
 
-`npx @permaweb/machine myAtomicAssets`
+```sh
+npm i @permaweb/machine
+npx machine collection --wallet ./wallet.json
+```
 
 ## Docs
 

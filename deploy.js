@@ -4,12 +4,12 @@ import { DeployPlugin } from 'warp-contracts-plugin-deploy'
 import fs from 'fs'
 
 const ATOMIC_TOKEN_SRC = 'Of9pi--Gj7hCTawhgxOwbuWnFI1h24TTgO5pw8ENJNQ'
-const folder = process.argv.splice(2)[0]
 const warp = WarpFactory.forMainnet().use(new DeployPlugin())
-const jwk = JSON.parse(fs.readFileSync('./wallet.json', 'utf-8'))
-const collection = JSON.parse(fs.readFileSync(`./${folder}/collection.json`, 'utf-8'))
 
-async function main() {
+
+export async function main(folder, walletFile) {
+  const jwk = JSON.parse(fs.readFileSync(walletFile, 'utf-8'))
+  const collection = JSON.parse(fs.readFileSync(`./${folder}/collection.json`, 'utf-8'))
   const bundlr = new Bundlr.default('https://node2.bundlr.network', 'arweave', jwk)
   const assets = fs.readdirSync(`./${folder}`)
     .filter(f => f !== 'collection.json')
@@ -39,11 +39,11 @@ async function main() {
     await new Promise(r => setTimeout(r, 1000))
     console.log(`Registering - ${id}`)
   }))
-  
+
   // Banner is optional
   let banner = ""
-  const hasBanner = fs.fstatSync(`./${folder}/banner.png`)
-  if (hasBanner) {
+  
+  if (fs.existsSync(`./${folder}/banner.png`)) {
     banner = (await bundlr.uploadFile(`./${folder}/banner.png`)).id
   }
   // deploy banner.png
@@ -60,9 +60,10 @@ async function main() {
   await warp.register(result, 'node2')
 
   console.log('Collection: ', result)
+
 }
 
-main()
+//main()
 
 function publishCollection(bundlr) {
   return async (input) => {
