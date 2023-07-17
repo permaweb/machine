@@ -56,6 +56,31 @@ The `collection.json` file follows a specific schema to describe your collection
 | price       | Unit price for each item to list                                                                                                         |
 | qty         | Qty from 0 - 100 of each item to list, eg 90 for 90%                                                                                     |
 
+## Example collection.json
+
+```json
+{
+  "name": "Cyber Raccoon collection",
+  "title": "Cyber Raccoon #",
+  "description": "Cyber Raccoon collection",
+  "topics": ["cyber", "animals", "permaweb"],
+  "licenseTags": {
+    "License": "UDLicense",
+    "Access": "public",
+    "Derivation": "allowed-with-license-fee",
+    "Derivation-Fee": "One-Time-0.1",
+    "Commercial": "allowed",
+    "Commercial-Fee": "One-Time-0.5",
+    "Payment-Mode": "Global-Distribution"
+  },
+  "owners": {
+    "vh-NTHVvlKZqRxc8LyyTNok65yQ55a_PJ1zWLb9G2JI": 100
+  },
+  "type": "image",
+  "code": "raccoon-collection"
+}
+```
+
 Please make sure to provide the necessary information in the `collection.json` file to accurately represent your collection.
 
 Enjoy using The Machine to deploy your collections to the permaweb!

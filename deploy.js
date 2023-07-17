@@ -114,18 +114,11 @@ function upload(bundlr) {
       { name: 'Title', value: asset.title },
       { name: 'Description', value: asset.description },
       { name: 'Type', value: asset.type },
-      { name: 'License', value: asset.licenseTags.License },
-      { name: 'Derivation', value: asset.licenseTags.Derivation },
-      { name: 'Commercial', value: asset.licenseTags.Commercial },
-      { name: 'License-Fee', value: asset.licenseTags['License-Fee']},
-      { name: 'Payment-Mode', value: asset.licenseTags['Payment-Mode']},
       { name: 'Collection-Code', value: asset.code}
     ]
-    
+    _tags = _tags.concat(Object.keys(asset.licenseTags).map(k => ({name: k, value: asset.licenseTags[k] })))
     _tags = _tags.concat(asset.topics.map(t => ({ name: `topic:${t}`, value: t})))
     
-    //console.log(_tags)
-
     const result = await bundlr.uploadFile(`./${asset.folder}/${asset.filename}`, {
       tags: _tags})
     
