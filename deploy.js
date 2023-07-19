@@ -114,7 +114,8 @@ function upload(bundlr) {
       { name: 'Title', value: asset.title },
       { name: 'Description', value: asset.description },
       { name: 'Type', value: asset.type },
-      { name: 'Collection-Code', value: asset.code}
+      { name: 'Collection-Code', value: asset.code},
+      { name: 'Indexed-By', value: 'ucm'}
     ]
     _tags = _tags.concat(Object.keys(asset.licenseTags).map(k => ({name: k, value: asset.licenseTags[k] })))
     _tags = _tags.concat(asset.topics.map(t => ({ name: `topic:${t}`, value: t})))
