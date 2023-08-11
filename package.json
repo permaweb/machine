@@ -1,7 +1,7 @@
 {
   "name": "@permaweb/machine",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "index.js",
   "bin": "./bin/machine.js",
   "license": "MIT",
