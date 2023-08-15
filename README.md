@@ -17,7 +17,7 @@ drop you wallet.json file in the project folder
 
 ```sh
 npm i @permaweb/machine
-npx machine mutants -w ./wallet.json
+npx @permaweb/machine mutants -w ./wallet.json
 ```
 
 ## Docs
@@ -65,7 +65,7 @@ The `collection.json` file follows a specific schema to describe your collection
   "description": "Cyber Raccoon collection",
   "topics": ["cyber", "animals", "permaweb"],
   "licenseTags": {
-    "License": "UDLicense",
+    "License": "yRj4a5KMctX_uOmKWCFJIjmY8DeJcusVk6-HzLiM_t8",
     "Access": "public",
     "Derivation": "allowed-with-license-fee",
     "Derivation-Fee": "One-Time-0.1",
