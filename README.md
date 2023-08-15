@@ -6,7 +6,7 @@ The Machine is a tool for deploying collections to the permaweb. To deploy a col
 
 ```sh
 npm i @permaweb/machine
-npx machine <collection> -w <arWalletFile>
+npx @permaweb/machine <collection> -w <arWalletFile>
 ```
 
 ## Example
