@@ -90,7 +90,8 @@ function publishCollection(bundlr) {
           name: input.collection.name,
           description: input.collection.description,
           ticker: 'ATOMIC',
-          claimable: []
+          claimable: [],
+          creator: input.collection.owners[0]
         })
       },
       { name: 'Title', value: input.collection.name },
@@ -99,7 +100,8 @@ function publishCollection(bundlr) {
       { name: 'License', value: 'UDLicense' },
       { name: 'Banner', value: input.banner },
       { name: 'Thumbnail', value: input.thumbnail },
-      { name: 'Collection-Code', value: input.collection.code }
+      { name: 'Collection-Code', value: input.collection.code },
+      { name: 'Creator', value: input.collection.owners[0] }
     ]
 
     const result = await bundlr.upload(JSON.stringify({ type: 'Collection', items: input.items }), { tags })
@@ -122,14 +124,16 @@ function upload(bundlr) {
           name: asset.title,
           description: asset.description,
           ticker: 'ATOMIC',
-          claimable: []
+          claimable: [],
+          creator: asset.owners[0]
         })
       },
       { name: 'Title', value: asset.title },
       { name: 'Description', value: asset.description },
       { name: 'Type', value: asset.type },
       { name: 'Collection-Code', value: asset.code },
-      { name: 'Indexed-By', value: 'ucm' }
+      { name: 'Indexed-By', value: 'ucm' },
+      { name: 'Creator', value: asset.owners[0] }
     ]
     _tags = _tags.concat(Object.keys(asset.licenseTags).map(k => ({ name: k, value: asset.licenseTags[k] })))
     _tags = _tags.concat(asset.topics.map(t => ({ name: `topic:${t}`, value: t })))
