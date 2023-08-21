@@ -29,7 +29,8 @@ export async function main(folder, walletFile) {
         type: collection.type || 'unknown',
         code: collection.code,
         fileType: 'image/png',
-        owners: collection.owners
+        owners: collection.owners,
+        creator: collection.creator
       }
 
     })
@@ -91,17 +92,17 @@ function publishCollection(bundlr) {
           description: input.collection.description,
           ticker: 'ATOMIC',
           claimable: [],
-          creator: input.collection.owners[0]
+          creator: input.collection.creator
         })
       },
       { name: 'Title', value: input.collection.name },
       { name: 'Description', value: input.collection.description },
       { name: 'Type', value: 'Document' },
-      { name: 'License', value: 'UDLicense' },
+      { name: 'License', value: input.collection.LicenseTags.License },
       { name: 'Banner', value: input.banner },
       { name: 'Thumbnail', value: input.thumbnail },
       { name: 'Collection-Code', value: input.collection.code },
-      { name: 'Creator', value: input.collection.owners[0] }
+      { name: 'Creator', value: input.collection.creator }
     ]
 
     const result = await bundlr.upload(JSON.stringify({ type: 'Collection', items: input.items }), { tags })
@@ -125,7 +126,7 @@ function upload(bundlr) {
           description: asset.description,
           ticker: 'ATOMIC',
           claimable: [],
-          creator: asset.owners[0]
+          creator: asset.creator
         })
       },
       { name: 'Title', value: asset.title },
@@ -133,7 +134,7 @@ function upload(bundlr) {
       { name: 'Type', value: asset.type },
       { name: 'Collection-Code', value: asset.code },
       { name: 'Indexed-By', value: 'ucm' },
-      { name: 'Creator', value: asset.owners[0] }
+      { name: 'Creator', value: asset.creator }
     ]
     _tags = _tags.concat(Object.keys(asset.licenseTags).map(k => ({ name: k, value: asset.licenseTags[k] })))
     _tags = _tags.concat(asset.topics.map(t => ({ name: `topic:${t}`, value: t })))

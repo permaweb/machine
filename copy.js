@@ -1,5 +1,6 @@
 import fs from 'fs'
 
-const mfers = fs.readdirSync('assets')
+const memes = fs.readdirSync('assets')
 
-mfers.map(f => fs.copyFileSync(`assets/${f}`, `mfers/${f.replace('permaweb-mfer-', '')}`))
+memes.map((f, i) => fs.copyFileSync(`assets/${f}`, `permashade/${i + 1}.png`))
+//memes.map((f, i) => console.log(f, i))
