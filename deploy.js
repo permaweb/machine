@@ -152,7 +152,7 @@ function upload(bundlr) {
     if (asset.renderer) {
       _tags = _tags.concat([{ name: 'Render-With', value: asset.renderer }])
     }
-    if (asset.thumbnail) {
+    if (asset.thumbnail && asset.type === 'audio') {
       _tags = _tags.concat([{ name: 'Thumbnail', value: asset.thumbnail }])
     }
 
