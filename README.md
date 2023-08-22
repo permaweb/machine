@@ -1,6 +1,11 @@
 # The Machine
 
-The Machine is a tool for deploying collections to the permaweb. To deploy a collection, you need a directory containing the following files:
+The Machine is an atomic asset creator tool for deploying collections to the permaweb. To deploy a collection, you need a directory containing the following files:
+
+* collection.json
+* 1..X.png or 1..X.mp3 etc.
+* banner.png
+* thumbnail.png
 
 ## Usage
 
@@ -53,8 +58,7 @@ The `collection.json` file follows a specific schema to describe your collection
 | owners      | A set of wallet addresses with the numeric amount of units for each wallet.                                                              |
 | type        | The type of asset.                                                                                                                       |
 | code        | An identifier for your collection. If left blank, a GUID will be created. This enables linking between the collection and manifest file. |
-| price       | Unit price for each item to list                                                                                                         |
-| qty         | Qty from 0 - 100 of each item to list, eg 90 for 90%                                                                                     |
+| creator | wallet address of the creator |
 
 ## Example collection.json
 
@@ -77,7 +81,8 @@ The `collection.json` file follows a specific schema to describe your collection
     "vh-NTHVvlKZqRxc8LyyTNok65yQ55a_PJ1zWLb9G2JI": 100
   },
   "type": "image",
-  "code": "raccoon-collection"
+  "code": "raccoon-collection",
+  "creator": "vh-NTHVvlKZqRxc8LyyTNok65yQ55a_PJ1zWLb9G2JI"
 }
 ```
 
