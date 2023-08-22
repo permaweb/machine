@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "@bundlr-network/client": "0.10.x",
+    "mime": "^3.0.0",
     "warp-contracts": "^1.4.14",
     "warp-contracts-plugin-deploy": "^1.0.9",
     "yargs": "^17.7.2"

@@ -1,6 +1,7 @@
 import Bundlr from '@bundlr-network/client'
 import { WarpFactory } from 'warp-contracts'
 import { DeployPlugin } from 'warp-contracts-plugin-deploy'
+import mime from 'mime'
 import fs from 'fs'
 
 const ATOMIC_TOKEN_SRC = 'Of9pi--Gj7hCTawhgxOwbuWnFI1h24TTgO5pw8ENJNQ'
@@ -11,37 +12,6 @@ export async function main(folder, walletFile) {
   const jwk = JSON.parse(fs.readFileSync(walletFile, 'utf-8'))
   const collection = JSON.parse(fs.readFileSync(`./${folder}/collection.json`, 'utf-8'))
   const bundlr = new Bundlr.default('https://node2.bundlr.network', 'arweave', jwk)
-  const assets = fs.readdirSync(`./${folder}`)
-    .filter(f => f !== 'collection.json')
-    .filter(f => f !== 'banner.gif')
-    .filter(f => f !== 'banner.png')
-    .filter(f => f !== 'thumbnail.png')
-    .map(f => {
-      const n = f.split('.')[0]
-      return {
-        folder,
-        n,
-        title: `${collection.title}${n}`,
-        description: collection.description,
-        topics: collection.topics,
-        licenseTags: collection.licenseTags,
-        filename: f,
-        type: collection.type || 'unknown',
-        code: collection.code,
-        fileType: 'image/png',
-        owners: collection.owners,
-        creator: collection.creator
-      }
-
-    })
-  const publish = await upload(bundlr)
-  const items = await Promise.all(assets.map(publish))
-  // registering assets
-  await Promise.all(items.map(async id => {
-    await warp.register(id, 'node2')
-    await new Promise(r => setTimeout(r, 1000))
-    console.log(`Registering - ${id}`)
-  }))
 
   // Banner is optional
   let banner = ""
@@ -58,6 +28,47 @@ export async function main(folder, walletFile) {
   if (fs.existsSync(`./${folder}/thumbnail.png`)) {
     thumbnail = (await bundlr.uploadFile(`./${folder}/thumbnail.png`)).id
   }
+  if (fs.existsSync(`./${folder}/thumbnail.gif`)) {
+    thumbnail = (await bundlr.uploadFile(`./${folder}/thumbnail.gif`)).id
+  }
+
+  const assets = fs.readdirSync(`./${folder}`)
+    .filter(f => f !== 'collection.json')
+    .filter(f => f !== 'banner.gif')
+    .filter(f => f !== 'banner.png')
+    .filter(f => f !== 'thumbnail.png')
+    .map(f => {
+      const [n, ext] = f.split('.')
+      const fileType = mime.getType(ext)
+      return {
+        folder,
+        n,
+        title: `${collection.title}${n}`,
+        description: collection.description,
+        topics: collection.topics,
+        licenseTags: collection.licenseTags,
+        filename: f,
+        type: collection.type || 'unknown',
+        code: collection.code,
+        fileType: fileType,
+        owners: collection.owners,
+        creator: collection.creator,
+        renderer: collection.renderer || null,
+        thumbnail: thumbnail === "" ? null : thumbnail,
+      }
+
+    })
+
+
+  const publish = await upload(bundlr)
+  const items = await Promise.all(assets.map(publish))
+  // registering assets
+  await Promise.all(items.map(async id => {
+    await warp.register(id, 'node2')
+    await new Promise(r => setTimeout(r, 1000))
+    console.log(`Registering - ${id}`)
+  }))
+
   // create collection manifest and upload manifest
   const result = await publishCollection(bundlr)({
     collection,
@@ -138,6 +149,12 @@ function upload(bundlr) {
     ]
     _tags = _tags.concat(Object.keys(asset.licenseTags).map(k => ({ name: k, value: asset.licenseTags[k] })))
     _tags = _tags.concat(asset.topics.map(t => ({ name: `topic:${t}`, value: t })))
+    if (asset.renderer) {
+      _tags = _tags.concat([{ name: 'Render-With', value: asset.renderer }])
+    }
+    if (asset.thumbnail) {
+      _tags = _tags.concat([{ name: 'Thumbnail', value: asset.thumbnail }])
+    }
 
     const result = await bundlr.uploadFile(`./${asset.folder}/${asset.filename}`, {
       tags: _tags
