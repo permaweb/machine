@@ -51,7 +51,7 @@ The `collection.json` file follows a specific schema to describe your collection
 | Property    | Description                                                                                                                              |
 | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | name        | The name of your collection.                                                                                                             |
-| title       | The title prefix, which will be appended to the filename. Usually, it is a number.                                                       |
+| title       | The title prefix, which will be appended to the filename. Usually, it is a number. If you want to use the filename as the title, then enter "FILENAME" as the value                                                      |
 | description | The description that you want to appear on the collection and every asset.                                                               |
 | topics      | Discoverable topics for your collection.                                                                                                 |
 | licenseTags | Tags to define your license.                                                                                                             |
@@ -65,7 +65,7 @@ The `collection.json` file follows a specific schema to describe your collection
 ```json
 {
   "name": "Cyber Raccoon collection",
-  "title": "Cyber Raccoon #",
+  "title": "Cyber Raccoon #", 
   "description": "Cyber Raccoon collection",
   "topics": ["cyber", "animals", "permaweb"],
   "licenseTags": {

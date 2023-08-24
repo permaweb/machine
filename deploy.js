@@ -26,6 +26,9 @@ export async function main(folder, walletFile) {
     if (fs.existsSync(`./${folder}/banner.gif`)) {
       banner = (await bundlr.uploadFile(`./${folder}/banner.gif`)).id
     }
+    if (fs.existsSync(`./${folder}/banner.jpg`)) {
+      banner = (await bundlr.uploadFile(`./${folder}/banner.jpg`)).id
+    }
 
     // deploy thumbnail.png
     let thumbnail = ""
@@ -35,19 +38,24 @@ export async function main(folder, walletFile) {
     if (fs.existsSync(`./${folder}/thumbnail.gif`)) {
       thumbnail = (await bundlr.uploadFile(`./${folder}/thumbnail.gif`)).id
     }
+    if (fs.existsSync(`./${folder}/thumbnail.jpg`)) {
+      thumbnail = (await bundlr.uploadFile(`./${folder}/thumbnail.jpg`)).id
+    }
 
     const assets = fs.readdirSync(`./${folder}`)
       .filter(f => f !== 'collection.json')
       .filter(f => f !== 'banner.gif')
       .filter(f => f !== 'banner.png')
       .filter(f => f !== 'thumbnail.png')
+      .filter(f => f !== 'banner.jpg')
+      .filter(f => f !== 'thumbnail.jpg')
       .map(f => {
         const [n, ext] = f.split('.')
-        const fileType = mime.getType(ext)
+        const fileType = ext === 'wav' ? 'audio/wav' : mime.getType(ext)
         return {
           folder,
           n,
-          title: `${collection.title}${n}`,
+          title: `${collection.title === 'FILENAME' ? '' : collection.title}${n}`,
           description: collection.description,
           topics: collection.topics,
           licenseTags: collection.licenseTags,
@@ -62,7 +70,6 @@ export async function main(folder, walletFile) {
         }
 
       })
-
 
     const publish = await upload(bundlr)
     const items = await Promise.all(assets.map(publish))
@@ -115,7 +122,7 @@ function publishCollection(bundlr) {
       { name: 'Title', value: input.collection.name },
       { name: 'Description', value: input.collection.description },
       { name: 'Type', value: 'Document' },
-      { name: 'License', value: input.collection.LicenseTags.License },
+      { name: 'License', value: input.collection.licenseTags.License },
       { name: 'Banner', value: input.banner },
       { name: 'Thumbnail', value: input.thumbnail },
       { name: 'Collection-Code', value: input.collection.code },
@@ -158,6 +165,7 @@ function upload(bundlr) {
     if (asset.renderer) {
       _tags = _tags.concat([{ name: 'Render-With', value: asset.renderer }])
     }
+
     if (asset.thumbnail && asset.type === 'audio') {
       _tags = _tags.concat([{ name: 'Thumbnail', value: asset.thumbnail }])
     }
