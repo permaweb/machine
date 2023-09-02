@@ -43,36 +43,59 @@ export async function main(folder, walletFile) {
     }
 
     const assets = fs.readdirSync(`./${folder}`)
-      .filter(f => f !== 'collection.json')
+      .filter(f => /json$/.test(f) === false)
+      .filter(f => /^thumbnail/.test(f) === false)
       .filter(f => f !== 'banner.gif')
       .filter(f => f !== 'banner.png')
       .filter(f => f !== 'thumbnail.png')
+      .filter(f => f !== 'thumbnail.gif')
       .filter(f => f !== 'banner.jpg')
       .filter(f => f !== 'thumbnail.jpg')
       .map(f => {
         const [n, ext] = f.split('.')
         const fileType = ext === 'wav' ? 'audio/wav' : mime.getType(ext)
-        return {
-          folder,
-          n,
-          title: `${collection.title === 'FILENAME' ? '' : collection.title}${n}`,
-          description: collection.description,
-          topics: collection.topics,
-          licenseTags: collection.licenseTags,
-          filename: f,
-          type: collection.type || 'unknown',
-          code: collection.code,
-          fileType: fileType,
-          owners: collection.owners,
-          creator: collection.creator,
-          renderer: collection.renderer || null,
-          thumbnail: thumbnail === "" ? null : thumbnail,
+        if (fs.existsSync(`./${folder}/${n}.json`)) {
+          const meta = JSON.parse(fs.readFileSync(`./${folder}/${n}.json`))
+          return {
+            folder,
+            n,
+            title: meta.title,
+            description: meta.description,
+            topics: meta.topics,
+            licenseTags: meta.licenseTags,
+            filename: f,
+            type: meta.type || 'unknown',
+            code: meta.code,
+            fileType: fileType,
+            owners: meta.owners,
+            creator: meta.creator,
+            renderer: meta.renderer || null,
+            thumbnail: thumbnail === "" ? null : thumbnail,
+          }
+        } else {
+          return {
+            folder,
+            n,
+            title: `${collection.title === 'FILENAME' ? '' : collection.title}${n}`,
+            description: collection.description,
+            topics: collection.topics,
+            licenseTags: collection.licenseTags,
+            filename: f,
+            type: collection.type || 'unknown',
+            code: collection.code,
+            fileType: fileType,
+            owners: collection.owners,
+            creator: collection.creator,
+            renderer: collection.renderer || null,
+            thumbnail: thumbnail === "" ? null : thumbnail,
+          }
         }
 
       })
 
     const publish = await upload(bundlr)
     const items = await Promise.all(assets.map(publish))
+
     // registering assets
     await Promise.all(items.map(async id => {
       await warp.register(id, 'node2')
@@ -101,6 +124,7 @@ export async function main(folder, walletFile) {
 
 function publishCollection(bundlr) {
   return async (input) => {
+
     const tags = [
       { name: 'Content-Type', value: 'application/json' },
       { name: 'Name', value: input.collection.name },
@@ -137,6 +161,10 @@ function publishCollection(bundlr) {
 
 function upload(bundlr) {
   return async (asset) => {
+    if (fs.existsSync(`./${asset.folder}/thumbnail_${asset.n}.jpg`)) {
+      const result = await bundlr.uploadFile(`./thumbnail_${asset.folder}/${asset.n}.jpg`)
+      asset.thumbnail = result.id
+    }
     let _tags = [
       { name: 'Content-Type', value: asset.fileType },
       { name: 'App-Name', value: 'SmartWeaveContract' },
@@ -166,7 +194,7 @@ function upload(bundlr) {
       _tags = _tags.concat([{ name: 'Render-With', value: asset.renderer }])
     }
 
-    if (asset.thumbnail && asset.type === 'audio') {
+    if (asset.thumbnail) {
       _tags = _tags.concat([{ name: 'Thumbnail', value: asset.thumbnail }])
     }
 
@@ -175,5 +203,6 @@ function upload(bundlr) {
     })
 
     return result.id
+
   }
 }

@@ -4,7 +4,7 @@ export function validate(collection) {
   return z.object({
     name: z.string(),
     title: z.string(),
-    description: z.string().max(300),
+    description: z.string().max(500),
     topics: z.array(z.string()),
     licenseTags: z.object({
       Access: z.string().optional(),
