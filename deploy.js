@@ -165,7 +165,7 @@ function upload(bundlr) {
       const result = await bundlr.uploadFile(`./thumbnail_${asset.folder}/${asset.n}.jpg`)
       asset.thumbnail = result.id
     }
-    description = asset.description
+    let description = asset.description
     if (fs.existsSync(`./${asset.folder}/${asset.n}.txt`)) {
       description = fs.readFileSync(`./${asset.folder}/${asset.n}.txt`, 'utf-8')
     }
