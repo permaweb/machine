@@ -165,6 +165,10 @@ function upload(bundlr) {
       const result = await bundlr.uploadFile(`./thumbnail_${asset.folder}/${asset.n}.jpg`)
       asset.thumbnail = result.id
     }
+    description = asset.description
+    if (fs.existsSync(`./${asset.folder}/${asset.n}.txt`)) {
+      description = fs.readFileSync(`./${asset.folder}/${asset.n}.txt`, 'utf-8')
+    }
     let _tags = [
       { name: 'Content-Type', value: asset.fileType },
       { name: 'App-Name', value: 'SmartWeaveContract' },
@@ -175,14 +179,14 @@ function upload(bundlr) {
         name: 'Init-State', value: JSON.stringify({
           balances: asset.owners,
           name: asset.title,
-          description: asset.description,
+          description: description,
           ticker: 'ATOMIC',
           claimable: [],
           creator: asset.creator
         })
       },
       { name: 'Title', value: asset.title },
-      { name: 'Description', value: asset.description },
+      { name: 'Description', value: description },
       { name: 'Type', value: asset.type },
       { name: 'Collection-Code', value: asset.code },
       { name: 'Indexed-By', value: 'ucm' },
