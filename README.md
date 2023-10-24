@@ -44,6 +44,8 @@ Here is an example directory structure:
 
 The `banner.png` file should have dimensions of 1600x900 pixels.
 
+> NOTE: If you want to add a description for each file, just include a `.txt` for each asset, so if you have asset-01.png, you would include asset-01.txt, etc.
+
 ## Collection JSON Schema
 
 The `collection.json` file follows a specific schema to describe your collection. Here are the available properties:
