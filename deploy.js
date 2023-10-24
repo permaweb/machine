@@ -43,6 +43,7 @@ export async function main(folder, walletFile) {
     }
 
     const assets = fs.readdirSync(`./${folder}`)
+      .filter(f => /txt$/.test(f) === false)
       .filter(f => /json$/.test(f) === false)
       .filter(f => /^thumbnail/.test(f) === false)
       .filter(f => f !== 'banner.gif')
